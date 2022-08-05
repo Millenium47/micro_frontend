@@ -11,7 +11,7 @@ const generateClassName = createGenerateClassName({
 
 export default () => {
     return (
-
+        // Browser history on container, memory history on child apps
         <BrowserRouter>
             <StylesProvider generateClassName={generateClassName}>
                 <div>

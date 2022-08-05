@@ -17,6 +17,7 @@ const mount = (el, { onNavigate }) => {
 
 if (process.env.NODE_ENV === 'development') {
     const devRoot = document.getElementById('_feed-dev-root');
+
     if (devRoot) {
         mount(devRoot);
     }
