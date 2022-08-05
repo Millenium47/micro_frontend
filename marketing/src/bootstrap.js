@@ -1,27 +1,37 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import { createMemoryHistory } from 'history';
+import { createMemoryHistory, createBrowserHistory } from 'history';
 
 import App from './App';
 
-const mount = (el, { onNavigate }) => {
+const mount = (el, { onNavigate, defaultHistory }) => {
+    const history = defaultHistory || createMemoryHistory();
 
-    console.log('onNavigate ', onNavigate);
-    const history = createMemoryHistory();
-    console.log('history ', history);
-    history.listen(onNavigate);
+    if (onNavigate) {
+        history.listen(onNavigate);
+    }
 
     ReactDom.render(
         <App history={history} />,
         el
     );
+
+    return {
+        onParentNavigate({ pathname: nextPathname }) {
+            const { pathname } = history.location;
+
+            if (pathname !== nextPathname) {
+                history.push(nextPathname);
+            }
+        }
+    };
 };
 
 if (process.env.NODE_ENV === 'development') {
     const devRoot = document.getElementById('_feed-dev-root');
 
     if (devRoot) {
-        mount(devRoot);
+        mount(devRoot, { defaultHistory: createBrowserHistory() });
     }
 }
 

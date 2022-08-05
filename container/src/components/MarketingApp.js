@@ -7,18 +7,19 @@ export default () => {
     const history = useHistory();
 
     useEffect(() => {
-        mount(ref.current, {
+        const { onParentNavigate } = mount(ref.current, {
             // pathname destructured as nextPathname
             onNavigate: ({ pathname: nextPathname }) => {
                 const { pathname } = history.location;
 
                 if (pathname !== nextPathname) {
-                    console.log('The container noticed navigation in Marketing ', nextPathname);
                     history.push(nextPathname);
                 }
             },
-        })
-    });
+        });
+
+        history.listen(onParentNavigate);
+    }, []);
 
     return (
         <div ref={ref} />
